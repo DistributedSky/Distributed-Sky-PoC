@@ -1,0 +1,9 @@
+<launch>
+    <!-- arguments -->
+    <arg name="ipfs_http_provider" default="http://172.18.18.2:5001"/>
+
+    <node pkg="dsky_main" type="message_to_bag_to_ipfs_node" name="message_to_bag_to_ipfs_node">
+        <param name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+    </node>
+
+</launch>

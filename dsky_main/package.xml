@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<package>
+  <name>dsky_main</name>
+  <version>0.0.0</version>
+  <description>Distributed sky main module</description>
+  <maintainer email="mail@akru.me">Konstantin Danilov</maintainer>
+  <license>BSD3</license>
+  <author email="mail@xomak.net">Konstantin Danilov</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+</package>
