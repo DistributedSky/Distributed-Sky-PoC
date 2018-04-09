@@ -1,0 +1,38 @@
+<launch>
+    <arg name="ipfs_http_provider" default="http://172.18.18.2:5001"/>
+    <arg name="token_address" default="0x2B3cE4c151f7c9662fdD12e5b9C7B39b0D61e7F2"/>
+    <!-- Meaningless stub -->
+    <arg name="validator_address" default="0xDCdFA7579f44341Aa3F4b9AdAc3c3A272A5f1aBF"/>
+    <arg name="validator_fee" default="0"/>
+    <arg name="web3_http_provider" default="http://parity:8545"/>
+    <arg name="lighthouse_contract" default="0xDCdFA7579f44341Aa3F4b9AdAc3c3A272A5f1aBF"/>
+
+    <remap from="route_confirmer/remote/sending/to_ipfs" to="message_to_bag_to_ipfs/input"/>
+    <remap from="route_confirmer/remote/incoming/objective_ipfs_hash" to="message_to_bag_to_ipfs/output"/>
+    <remap from="route_confirmer/remote/incoming/result" to="infochan/incoming/result"/>
+    <remap from="route_confirmer/remote/sending/ask_publish" to="infochan/signing/ask"/>
+
+    <include file="$(find distributed_sky_uav)/launch/route_confirmer.launch">
+        <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+        <arg name="token_address" value="$(arg token_address)"/>
+        <arg name="validator_address" value="$(arg validator_address)"/>
+        <arg name="validator_fee" value="$(arg validator_fee)"/>
+    </include>
+
+    <include file="$(find dsky_main)/launch/message_to_bag_to_ipfs.launch">
+        <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+    </include>
+
+    <!-- market group -->
+    <group ns="infochan">
+        <node pkg="robonomics_lighthouse" type="infochan_node" name="infochan">
+            <param name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+            <param name="lighthouse_contract" value="$(arg lighthouse_contract)"/>
+        </node>
+
+        <node pkg="robonomics_lighthouse" type="signer_node" name="signer" output="screen">
+            <param name="web3_http_provider" value="$(arg web3_http_provider)"/>
+        </node>
+
+    </group>
+</launch>

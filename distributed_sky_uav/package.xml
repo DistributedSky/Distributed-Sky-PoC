@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package>
+  <name>distributed_sky_uav</name>
+  <version>0.0.0</version>
+  <description>Distributed sky UAV module</description>
+  <maintainer email="mail@akru.me">Konstantin Danilov</maintainer>
+  <license>BSD3</license>
+  <author email="mail@xomak.net">Konstantin Danilov</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>geographic_msgs</build_depend>
+  <run_depend>message_runtime</run_depend>
+
+</package>
