@@ -20,6 +20,7 @@ catkin_install_python(
 install(
     FILES
         launch/test.launch
+        launch/message_to_bag_to_ipfs.launch
     DESTINATION
         ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
 )
