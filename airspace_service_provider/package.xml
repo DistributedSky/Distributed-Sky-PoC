@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package>
+  <name>airspace_service_provider</name>
+  <version>0.0.0</version>
+  <description>Distributed sky airsapce service provider module</description>
+  <maintainer email="mail@akru.me">Konstantin Danilov</maintainer>
+  <license>BSD3</license>
+  <author email="mail@xomak.net">Konstantin Danilov</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>rospy</buildtool_depend>
+
+
+</package>
