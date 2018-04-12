@@ -6,6 +6,7 @@
     <arg name="validator_fee" default="0"/>
     <arg name="web3_http_provider" default="http://parity:8545"/>
     <arg name="lighthouse_contract" default="0xDCdFA7579f44341Aa3F4b9AdAc3c3A272A5f1aBF"/>
+    <arg name="eth_account_address" default="" />
 
     <remap from="route_confirmer/remote/sending/to_ipfs" to="message_to_bag_to_ipfs/input"/>
     <remap from="route_confirmer/remote/incoming/objective_ipfs_hash" to="message_to_bag_to_ipfs/output"/>
@@ -23,16 +24,13 @@
         <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
     </include>
 
-    <!-- market group -->
-    <group ns="infochan">
-        <node pkg="robonomics_lighthouse" type="infochan_node" name="infochan">
-            <param name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
-            <param name="lighthouse_contract" value="$(arg lighthouse_contract)"/>
-        </node>
+    <include file="$(find robonomics_lighthouse)/launch/infochan.launch">
+      <arg name="web3_http_provider" value="$(arg web3_http_provider)" />
+      <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+      <arg name="lighthouse_contract" value="$(arg lighthouse_contract)" />
+      <arg name="enable_generator" value="false" />
+      <arg name="enable_signer" value="true" />
+      <arg name="eth_account_address" value="$(arg eth_account_address)" />
+    </include>
 
-        <node pkg="robonomics_lighthouse" type="signer_node" name="signer" output="screen">
-            <param name="web3_http_provider" value="$(arg web3_http_provider)"/>
-        </node>
-
-    </group>
 </launch>
