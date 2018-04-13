@@ -31,6 +31,7 @@ class AirspaceServiceProvider:
                                                      queue_size=10)
 
     def on_route_request(self, route):
+        rospy.loginfo("ASP got new route request")
         confirmation = RouteConfirmationResponse()
         confirmation.route = route
         confirmation.isConfirmed = True
@@ -38,6 +39,7 @@ class AirspaceServiceProvider:
         self.liability_finish_service()
 
     def on_ask(self, ask):
+        rospy.loginfo("ASP found an Ask")
         bid = self.prepare_bid(ask.model, ask.cost, ask.deadline)
         self.bid_topic.publish(bid)
 

@@ -3,13 +3,13 @@
     <arg name="token_address" default="0x2B3cE4c151f7c9662fdD12e5b9C7B39b0D61e7F2"/>
     <!-- Meaningless stub -->
     <arg name="validator_address" default="0xDCdFA7579f44341Aa3F4b9AdAc3c3A272A5f1aBF"/>
-    <arg name="lighthouse_fee" default="0"/>
+    <arg name="lighthouse_fee" default="1"/>
     <arg name="web3_http_provider" default="http://parity:8545"/>
     <arg name="lighthouse_contract" default="0xDCdFA7579f44341Aa3F4b9AdAc3c3A272A5f1aBF"/>
     <arg name="eth_account_address" default="" />
 
     <remap from="airspace_service_provider/remote/incoming/ask" to="infochan/incoming/ask"/>
-    <remap from="airspace_service_provider/sending/bid" to="infochan/signing/bid"/>
+    <remap from="airspace_service_provider/remote/sending/bid" to="infochan/signing/bid"/>
 
     <include file="$(find airspace_service_provider)/launch/airspace_service_provider.launch">
         <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
