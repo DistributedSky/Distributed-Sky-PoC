@@ -3,6 +3,8 @@ from urllib.parse import urlparse
 import rosbag, rospy
 import ipfsapi
 
+import geographic_msgs.msg
+
 from std_srvs.srv import Empty
 from robonomics_lighthouse.msg import Ask, Bid, Result
 from distributed_sky_uav.msg import RouteConfirmationRequest, RouteConfirmationResponse
@@ -21,7 +23,7 @@ class AirspaceServiceProvider:
         ipfs_provider = urlparse(rospy.get_param('~ipfs_http_provider')).netloc.split(':')
         self.ipfs = ipfsapi.connect(ipfs_provider[0], int(ipfs_provider[1]))
 
-        rospy.Subscriber('~rosbag/route_request', RouteConfirmationRequest, self.on_route_request)
+        rospy.Subscriber('~rosbag/route_request', geographic_msgs.msg.GeoPath, self.on_route_request)
         rospy.Subscriber('~remote/incoming/ask', Ask, self.on_ask)
 
         self.liability_finish_service = rospy.ServiceProxy('~liability_finish', Empty)
@@ -37,6 +39,7 @@ class AirspaceServiceProvider:
         confirmation.isConfirmed = True
         self.confirmed_route_topic.publish(confirmation)
         self.liability_finish_service()
+        rospy.loginfo("ASP sent confirmation")
 
     def on_ask(self, ask):
         rospy.loginfo("ASP found an Ask")

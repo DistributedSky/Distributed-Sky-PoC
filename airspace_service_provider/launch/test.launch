@@ -10,6 +10,9 @@
 
     <remap from="airspace_service_provider/remote/incoming/ask" to="infochan/incoming/ask"/>
     <remap from="airspace_service_provider/remote/sending/bid" to="infochan/signing/bid"/>
+    <remap from="airspace_service_provider/rosbag/route_request" to="/rosbag/route_request"/>
+    <remap from="airspace_service_provider/liability_finish" to="/liability/finish"/>
+    <remap from="airspace_service_provider/local/sending/confirmation_result" to="/rosbag/route_response"/>
 
     <include file="$(find airspace_service_provider)/launch/airspace_service_provider.launch">
         <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
@@ -24,5 +27,12 @@
       <arg name="enable_generator" value="false" />
       <arg name="enable_signer" value="true" />
       <arg name="eth_account_address" value="$(arg eth_account_address)" />
+    </include>
+
+    <remap from="/liability/result" to="/infochan/signing/result"/>
+    <include file="$(find robonomics_liability)/launch/liability.launch">
+        <arg name="eth_account_address" value="$(arg eth_account_address)" />
+        <arg name="web3_http_provider" value="$(arg web3_http_provider)" />
+        <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
     </include>
 </launch>
