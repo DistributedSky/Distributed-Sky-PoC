@@ -5,12 +5,18 @@
     <arg name="token_address"/>
     <arg name="validator_address"/>
     <arg name="validator_fee"/>
+    <arg name="web3_http_provider"/>
+    <arg name="eth_account_address"/>
+    <arg name="rosbag_result_topic" default="/rosbag/route_response"/>
 
     <node pkg="distributed_sky_uav" type="route_confirmer_node" name="route_confirmer" output="screen">
         <param name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
         <param name="token_address" value="$(arg token_address)"/>
         <param name="validator_address" value="$(arg validator_address)"/>
         <param name="validator_fee" value="$(arg validator_fee)"/>
+        <param name="eth_account_address" value="$(arg eth_account_address)"/>
+        <param name="web3_http_provider" value="$(arg web3_http_provider)"/>
+        <param name="rosbag_result_topic" value="$(arg rosbag_result_topic)"/>
     </node>
 
 </launch>

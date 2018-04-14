@@ -2,15 +2,17 @@
     <arg name="ipfs_http_provider" default="http://172.18.18.2:5001"/>
     <arg name="token_address" default="0x2B3cE4c151f7c9662fdD12e5b9C7B39b0D61e7F2"/>
     <!-- Meaningless stub -->
-    <arg name="validator_address" default="0xDCdFA7579f44341Aa3F4b9AdAc3c3A272A5f1aBF"/>
-    <arg name="validator_fee" default="1"/>
+    <arg name="validator_address" default="0x0000000000000000000000000000000000000000"/>
+    <arg name="validator_fee" default="0"/>
     <arg name="web3_http_provider" default="http://parity:8545"/>
     <arg name="lighthouse_contract" default="0xDCdFA7579f44341Aa3F4b9AdAc3c3A272A5f1aBF"/>
     <arg name="eth_account_address" default="" />
+    <arg name="rosbag_topic" default="/rosbag/route_request" />
 
     <remap from="route_confirmer/remote/sending/to_ipfs" to="message_to_bag_to_ipfs/input"/>
     <remap from="route_confirmer/remote/incoming/objective_ipfs_hash" to="message_to_bag_to_ipfs/output"/>
     <remap from="route_confirmer/remote/incoming/result" to="infochan/incoming/result"/>
+    <remap from="route_confirmer/remote/incoming/liability" to="liability/incoming"/>
     <remap from="route_confirmer/remote/sending/ask_publish" to="infochan/signing/ask"/>
 
     <include file="$(find distributed_sky_uav)/launch/route_confirmer.launch">
@@ -18,10 +20,13 @@
         <arg name="token_address" value="$(arg token_address)"/>
         <arg name="validator_address" value="$(arg validator_address)"/>
         <arg name="validator_fee" value="$(arg validator_fee)"/>
+        <arg name="eth_account_address" value="$(arg eth_account_address)" />
+        <arg name="web3_http_provider" value="$(arg web3_http_provider)" />
     </include>
 
     <include file="$(find dsky_main)/launch/message_to_bag_to_ipfs.launch">
         <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+        <arg name="rosbag_topic" value="$(arg rosbag_topic)"/>
     </include>
 
     <include file="$(find robonomics_lighthouse)/launch/infochan.launch">
@@ -31,6 +36,13 @@
       <arg name="enable_generator" value="false" />
       <arg name="enable_signer" value="true" />
       <arg name="eth_account_address" value="$(arg eth_account_address)" />
+    </include>
+
+    <include file="$(find robonomics_liability)/launch/liability.launch">
+        <arg name="eth_account_address" value="$(arg eth_account_address)" />
+        <arg name="web3_http_provider" value="$(arg web3_http_provider)" />
+        <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+        <arg name="enable_executor" value="false" />
     </include>
 
 </launch>
