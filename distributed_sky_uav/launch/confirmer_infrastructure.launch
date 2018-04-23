@@ -7,7 +7,8 @@
     <arg name="web3_http_provider" default="http://parity:8545"/>
     <arg name="lighthouse_contract" default="0xDCdFA7579f44341Aa3F4b9AdAc3c3A272A5f1aBF"/>
     <arg name="eth_account_address" default="" />
-    <arg name="rosbag_topic" default="/rosbag/route_request" />
+    <arg name="request_rosbag_topic" default="/rosbag/route_request" />
+    <arg name="response_rosbag_topic" default="/rosbag/route_response"/>
 
     <remap from="route_confirmer/remote/sending/to_ipfs" to="message_to_bag_to_ipfs/input"/>
     <remap from="route_confirmer/remote/incoming/objective_ipfs_hash" to="message_to_bag_to_ipfs/output"/>
@@ -22,11 +23,12 @@
         <arg name="validator_fee" value="$(arg validator_fee)"/>
         <arg name="eth_account_address" value="$(arg eth_account_address)" />
         <arg name="web3_http_provider" value="$(arg web3_http_provider)" />
+        <arg name="response_rosbag_topic" value="$(arg response_rosbag_topic)" />
     </include>
 
     <include file="$(find dsky_main)/launch/message_to_bag_to_ipfs.launch">
         <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
-        <arg name="rosbag_topic" value="$(arg rosbag_topic)"/>
+        <arg name="rosbag_topic" value="$(arg request_rosbag_topic)"/>
     </include>
 
     <include file="$(find robonomics_lighthouse)/launch/infochan.launch">

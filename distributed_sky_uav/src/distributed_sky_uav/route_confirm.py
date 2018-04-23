@@ -12,7 +12,7 @@ from robonomics_liability.msg import Liability
 from robonomics_lighthouse.msg import Ask, Bid, Result
 from web3 import Web3, HTTPProvider
 
-from distributed_sky_uav.msg import RouteConfirmationRequest
+from distributed_sky_uav.msg import RouteConfirmationRequest, RouteConfirmationResponse
 
 
 class RouteConfirmer:
@@ -29,7 +29,7 @@ class RouteConfirmer:
         self.token_address = rospy.get_param('~token_address')
         self.validator_fee = rospy.get_param('~validator_fee')
         self.validator_address = rospy.get_param('~validator_address')
-        self.rosbag_result_topic_name = rospy.get_param('~rosbag_result_topic')
+        self.rosbag_response_topic_name = rospy.get_param('~response_rosbag_topic')
 
         self.account = rospy.get_param('~eth_account_address')
         self.account = self.web3.eth.accounts[0] if len(self.account) == 0 else self.account
@@ -37,7 +37,7 @@ class RouteConfirmer:
         ipfs_provider = urlparse(rospy.get_param('~ipfs_http_provider')).netloc.split(':')
         self.ipfs = ipfsapi.connect(ipfs_provider[0], int(ipfs_provider[1]))
 
-        rospy.Subscriber('~local/incoming/route_request', RouteConfirmationRequest, self.on_route_request)
+        rospy.Subscriber('~local/route_request', RouteConfirmationRequest, self.on_route_request)
         rospy.Subscriber('~remote/incoming/objective_ipfs_hash', std_msgs.msg.String, self.on_objective_ipfs_hash)
         rospy.Subscriber('~remote/incoming/result', Result, self.on_result)
         rospy.Subscriber('~remote/incoming/liability', Liability, self.on_liability)
@@ -45,7 +45,7 @@ class RouteConfirmer:
         self.request_ipfs_hash_topic = rospy.Publisher('~remote/sending/to_ipfs', geographic_msgs.msg.GeoPath,
                                                        queue_size=10)
         self.ask_topic = rospy.Publisher('~remote/sending/ask_publish', Ask, queue_size=10)
-        self.confirmed_route_topic = rospy.Publisher('~local/sending/confirmation_result', geographic_msgs.msg.GeoPath,
+        self.confirmed_route_topic = rospy.Publisher('~local/route_response', RouteConfirmationResponse,
                                                      queue_size=10)
 
     def on_route_request(self, msg):
@@ -83,13 +83,15 @@ class RouteConfirmer:
                     os.chdir(tmpdir)
                     self.ipfs.get(msg.result)
                     bag_path = os.path.join(tmpdir, msg.result)
-                    rospy.logdebug('Objective is written to %s', bag_path)
-                    # result = self.get_message_from_rosbag(bag_path, self.rosbag_result_topic_name)
+                    rospy.logdebug('Result is written to %s', bag_path)
+                    result = self.get_message_from_rosbag(bag_path, self.rosbag_response_topic_name)
                     self._current_request = None
                     self._current_liability = None
-                    # rospy.loginfo("Route request handled, result: %s", result.isConfirmed)
-                    rospy.loginfo("Route request handled")
-                    # self.confirmed_route_topic.publish(result.route)
+                    if result:
+                        rospy.loginfo("Route request handled, result: %s", result.isConfirmed)
+                        self.confirmed_route_topic.publish(result)
+                    else:
+                        rospy.logwarn("Received rosbag does not have Route Confirmation messages")
             else:
                 rospy.logwarn("Got result, when no request was pending")
 

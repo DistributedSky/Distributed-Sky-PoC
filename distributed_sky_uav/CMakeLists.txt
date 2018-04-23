@@ -33,6 +33,7 @@ catkin_install_python(
 install(
     FILES
         launch/route_confirmer.launch
+        launch/confirmer_infrastructure.launch
     DESTINATION
         ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
 )
