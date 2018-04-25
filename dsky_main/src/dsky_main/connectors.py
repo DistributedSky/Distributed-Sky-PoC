@@ -6,7 +6,7 @@ from base58 import b58encode, b58decode
 
 class IPFSFileRegistry:
 
-    def __init__(self, abi, web3, ipfsapi, eth_account):
+    def __init__(self, abi, web3, ipfsapi, eth_account=None):
 
         self.eth_account = eth_account
         self.web3 = web3
@@ -23,6 +23,8 @@ class IPFSFileRegistry:
         return self.get_from_ipfs(ipfs_file_hash)
 
     def post_ipfs_hash(self, address, ipfs_file_hash, force=False):
+        if self.eth_account is None:
+            raise ValueError("Eth account is not provided")
         contract = self._contract(address)
         new_hash_bytes = b58decode(ipfs_file_hash)[2:]
         current_hash_bytes = contract.functions.fileHash().call()
