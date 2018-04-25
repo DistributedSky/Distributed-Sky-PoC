@@ -5,7 +5,9 @@
     <arg name="validator_address" default="0xDCdFA7579f44341Aa3F4b9AdAc3c3A272A5f1aBF"/>
     <arg name="lighthouse_fee" default="1"/>
     <arg name="web3_http_provider" default="http://parity:8545"/>
-    <arg name="lighthouse_contract" default="0xDCdFA7579f44341Aa3F4b9AdAc3c3A272A5f1aBF"/>
+    <arg name="lighthouse_contract"/>
+    <arg name="asp_registry_address"/>
+    <arg name="asp_manifest_address"/>
     <arg name="eth_account_address" default="" />
 
     <remap from="airspace_service_provider/remote/incoming/ask" to="infochan/incoming/ask"/>
@@ -13,6 +15,15 @@
     <remap from="airspace_service_provider/rosbag/route_request" to="/rosbag/route_request"/>
     <remap from="airspace_service_provider/liability_finish" to="/liability/finish"/>
     <remap from="airspace_service_provider/local/sending/confirmation_result" to="/rosbag/route_response"/>
+    <remap from="airspace_service_provider/local/asp_service_id" to="registry_connector/asp_service_id"/>
+
+    <include file="$(find airspace_service_provider)/launch/registry_connector.launch">
+        <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+        <arg name="web3_http_provider" value="$(arg web3_http_provider)" />
+        <arg name="eth_account_address" value="$(arg eth_account_address)" />
+        <arg name="asp_registry_address" value="$(arg asp_registry_address)"/>
+        <arg name="asp_manifest_address" value="$(arg asp_manifest_address)"/>
+    </include>
 
     <include file="$(find airspace_service_provider)/launch/airspace_service_provider.launch">
         <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>

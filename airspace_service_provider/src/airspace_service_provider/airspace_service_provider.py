@@ -6,6 +6,7 @@ import ipfsapi
 import geographic_msgs.msg
 
 from std_srvs.srv import Empty
+from std_msgs.msg import String
 from robonomics_lighthouse.msg import Ask, Bid, Result
 from distributed_sky_uav.msg import RouteConfirmationRequest, RouteConfirmationResponse
 
@@ -32,6 +33,13 @@ class AirspaceServiceProvider:
         self.confirmed_route_topic = rospy.Publisher('~local/sending/confirmation_result', RouteConfirmationResponse,
                                                      queue_size=10)
 
+        self.asp_service_id = None
+        rospy.Subscriber('~local/asp_service_id', String, self.on_new_service_id)
+
+    def on_new_service_id(self, msg):
+        rospy.loginfo("Got new service id: %s", msg.data)
+        self.asp_service_id = msg.data
+
     def on_route_request(self, route):
         rospy.loginfo("ASP got new route request")
         confirmation = RouteConfirmationResponse()
@@ -42,9 +50,11 @@ class AirspaceServiceProvider:
         rospy.loginfo("ASP sent confirmation")
 
     def on_ask(self, ask):
-        rospy.loginfo("ASP found an Ask")
-        bid = self.prepare_bid(ask.model, ask.cost, ask.deadline)
-        self.bid_topic.publish(bid)
+        rospy.logdebug("ASP found an Ask")
+        if ask.model == self.asp_service_id:
+            rospy.logdebug("ASP found an Ask with its service id")
+            bid = self.prepare_bid(ask.model, ask.cost, ask.deadline)
+            self.bid_topic.publish(bid)
 
     def prepare_bid(self, model, cost, deadline):
         msg = Bid()
