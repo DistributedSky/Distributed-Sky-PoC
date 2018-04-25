@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package>
+  <name>global_planner</name>
+  <version>0.0.0</version>
+  <description>Distributed sky Global Planner</description>
+  <maintainer email="mail@akru.me">Konstantin Danilov</maintainer>
+  <license>BSD3</license>
+  <author email="mail@xomak.net">Konstantin Danilov</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>message_runtime</run_depend>
+
+</package>
