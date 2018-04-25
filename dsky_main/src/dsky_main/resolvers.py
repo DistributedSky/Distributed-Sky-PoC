@@ -18,6 +18,14 @@ class ASPZone:
         self.id = id
 
 
+class GlobalRegion:
+
+    def __init__(self, name, asp_registry_address, geometry):
+        self.asp_registry_address = asp_registry_address
+        self.name = name
+        self.geometry = geometry
+
+
 class ParseException(BaseException):
     pass
 
@@ -55,3 +63,9 @@ class RegionResolver(GeoJSONResolver):
         for region in self.items:
             if region.contract_address == address:
                 return region
+
+
+class GlobalRegionResolver(GeoJSONResolver):
+
+    def _create_item(self, properties, geometry):
+        return GlobalRegion(properties['name'], properties['aspRegistryContract'], geometry)
