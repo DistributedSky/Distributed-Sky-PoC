@@ -1,7 +1,7 @@
 import json
 from collections import namedtuple
 
-from shapely.geometry import LineString, Point, MultiLineString
+from shapely.geometry import LineString
 
 from dsky_main.resolvers import GlobalRegionResolver, RegionResolver
 
@@ -19,11 +19,11 @@ class Segmenter:
         segments = []
         for region in items:
             intersection = route.intersection(region.geometry)
-            if len(intersection) > 0:
-                if type(intersection) is not LineString:
-                    raise NotImplementedError("Non LineString segments currently are not supported")
-                else:
-                    segments.append(ServicedRoute(intersection, region))
+            if type(intersection) is not LineString:
+                raise NotImplementedError("Non LineString segments currently are not supported ({} was passed)"
+                                          .format(type(intersection)))
+            else:
+                segments.append(ServicedRoute(intersection, region))
         return segments
 
     def segment_by_global_regions(self, route):
@@ -45,7 +45,7 @@ class Segmenter:
             provider_asp_registry_address = serviced_route.service_provider.asp_registry_address
             asp_resolver = self._resolve_region(provider_asp_registry_address)
             region_segments = self._segments(serviced_route.route, asp_resolver.items)
-            segments = segments + region_segments
+            output_segments = output_segments + region_segments
 
         return output_segments
 

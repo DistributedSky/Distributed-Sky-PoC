@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(distributed_sky_uav)
+project(global_planner)
 
 find_package(catkin REQUIRED
     COMPONENTS

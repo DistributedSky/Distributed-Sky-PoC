@@ -4,24 +4,52 @@
     <!-- Meaningless stub -->
     <arg name="validator_address" default="0xDCdFA7579f44341Aa3F4b9AdAc3c3A272A5f1aBF"/>
     <arg name="lighthouse_fee" default="1"/>
+    <arg name="validator_fee" default="0"/>
     <arg name="web3_http_provider" default="http://parity:8545"/>
     <arg name="lighthouse_contract"/>
     <arg name="global_registry_address"/>
     <arg name="eth_account_address" default="" />
+    <arg name="request_rosbag_topic" default="/rosbag/route_request" />
+    <arg name="response_rosbag_topic" default="/rosbag/route_response"/>
 
     <remap from="global_planner/remote/incoming/ask" to="infochan/incoming/ask"/>
     <remap from="global_planner/remote/sending/bid" to="infochan/signing/bid"/>
     <remap from="global_planner/rosbag/route_request" to="/rosbag/route_request"/>
-    <remap from="global_planner/liability_finish" to="/liability/finish"/> <!-- not yet implemented -->
-    <remap from="global_planner/local/sending/confirmation_result" to="/rosbag/route_response"/> <!-- not yet implemented -->
+    <remap from="global_planner/liability_finish" to="/liability/finish"/>
+    <remap from="global_planner/local/sending/confirmation_result" to="/rosbag/route_response"/>
+    <remap from="global_planner/local/incoming/route_response" to="/route_confirmer/local/route_response"/>
+    <remap from="global_planner/remote/sending/regional_confirm_request" to="/route_confirmer/local/route_request"/>
 
-    <include file="$(find airspace_service_provider)/launch/airspace_service_provider.launch">
+    <include file="$(find global_planner)/launch/global_planner.launch">
         <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
         <arg name="web3_http_provider" value="$(arg web3_http_provider)" />
         <arg name="token_address" value="$(arg token_address)"/>
         <arg name="lighthouse_fee" value="$(arg lighthouse_fee)"/>
         <arg name="global_registry_address" value="$(arg global_registry_address)"/>
     </include>
+
+
+    <remap from="route_confirmer/remote/sending/to_ipfs" to="message_to_bag_to_ipfs/input"/>
+    <remap from="route_confirmer/remote/incoming/objective_ipfs_hash" to="message_to_bag_to_ipfs/output"/>
+    <remap from="route_confirmer/remote/incoming/result" to="infochan/incoming/result"/>
+    <remap from="route_confirmer/remote/incoming/liability" to="liability/incoming"/>
+    <remap from="route_confirmer/remote/sending/ask_publish" to="infochan/signing/ask"/>
+
+    <include file="$(find distributed_sky_uav)/launch/route_confirmer.launch">
+        <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+        <arg name="token_address" value="$(arg token_address)"/>
+        <arg name="validator_address" value="$(arg validator_address)"/>
+        <arg name="validator_fee" value="$(arg validator_fee)"/>
+        <arg name="eth_account_address" value="$(arg eth_account_address)" />
+        <arg name="web3_http_provider" value="$(arg web3_http_provider)" />
+        <arg name="response_rosbag_topic" value="$(arg response_rosbag_topic)" />
+    </include>
+
+    <include file="$(find dsky_main)/launch/message_to_bag_to_ipfs.launch">
+        <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+        <arg name="rosbag_topic" value="$(arg request_rosbag_topic)"/>
+    </include>
+
 
     <include file="$(find robonomics_lighthouse)/launch/infochan.launch">
       <arg name="web3_http_provider" value="$(arg web3_http_provider)" />
