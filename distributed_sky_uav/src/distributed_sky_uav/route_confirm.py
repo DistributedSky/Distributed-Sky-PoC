@@ -13,6 +13,7 @@ from robonomics_lighthouse.msg import Ask, Bid, Result
 from web3 import Web3, HTTPProvider
 
 from distributed_sky_uav.msg import RouteConfirmationRequest, RouteConfirmationResponse
+from dsky_main import utils
 
 
 class RouteConfirmer:
@@ -84,7 +85,7 @@ class RouteConfirmer:
                     self.ipfs.get(msg.result)
                     bag_path = os.path.join(tmpdir, msg.result)
                     rospy.logdebug('Result is written to %s', bag_path)
-                    result = self.get_message_from_rosbag(bag_path, self.rosbag_response_topic_name)
+                    result = utils.get_message_from_rosbag(bag_path, self.rosbag_response_topic_name)
                     self._current_request = None
                     self._current_liability = None
                     if result:
