@@ -35,6 +35,8 @@ class RegistryConnector:
 
         self.asp_service_id_topic = rospy.Publisher('~asp_service_id', String, latch=True)
 
+        self.service_name = rospy.get_param('~announced_service_name')
+
         self.current_region = None
         self.load_info()
 
@@ -45,14 +47,14 @@ class RegistryConnector:
         if self.current_region:
             rospy.loginfo("%s got assigned region.", self.asp_manifest_address)
             service = self.create_confirm_route_service()
-            self.publish_manifest({'regional_asp_route_confirm': service})
+            self.publish_manifest({self.service_name: service})
             self.asp_service_id_topic.publish(String(service))
         else:
             rospy.logwarn("%s has no assigned region", self.asp_manifest_address)
 
     def create_confirm_route_service(self):
         confirm_route_service = OrderedDict()
-        confirm_route_service['service_id'] = 'regional_asp_route_confirm'
+        confirm_route_service['service_id'] = self.service_name
         confirm_route_service['contract_address'] = self.asp_manifest_address
         return self.asp_manifest.add_to_ipfs(json.dumps(confirm_route_service))
 

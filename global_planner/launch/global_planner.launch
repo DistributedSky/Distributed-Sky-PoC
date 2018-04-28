@@ -5,7 +5,7 @@
     <arg name="lighthouse_fee"/>
     <arg name="web3_http_provider"/>
     <arg name="global_registry_address"/>
-    <arg name="service_id" default="QmRkDQtfzNcCikCFawXgqxSo8eeWxYiF2umJvqah8boxUH"/>
+    <arg name="announced_service_name" default="global_planner_route_confirm"/>
 
 
     <node pkg="global_planner" type="global_planner_node" name="global_planner"
@@ -15,7 +15,7 @@
         <param name="token_address" value="$(arg token_address)"/>
         <param name="web3_http_provider" value="$(arg web3_http_provider)"/>
         <param name="global_registry_address" value="$(arg global_registry_address)"/>
-        <param name="service_id" value="$(arg service_id)"/>
+        <param name="announced_service_name" value="$(arg announced_service_name)"/>
         <param name="asp_registry_abi" textfile="$(find dsky_main)/abi/ASPRegistry.json"/>
         <param name="asp_manifest_abi" textfile="$(find dsky_main)/abi/ASPManifest.json"/>
         <param name="global_registry_abi" textfile="$(find dsky_main)/abi/GlobalRegionsRegistry.json"/>

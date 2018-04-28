@@ -13,7 +13,7 @@ from robonomics_lighthouse.msg import Ask, Bid, Result
 
 from distributed_sky_uav.msg import RouteConfirmationRequest, RouteConfirmationResponse
 
-from dsky_main.connectors import IPFSFileRegistry
+from dsky_main.connectors import IPFSFileRegistry, IPFSConnector
 from global_planner.converters import GeoConverter
 from global_planner.segmenter import Segmenter
 
@@ -53,6 +53,7 @@ class GlobalPlanner:
         self.asp_registry = IPFSFileRegistry(self.asp_registry_abi, self.web3, self.ipfs)
         self.asp_manifest = IPFSFileRegistry(self.asp_manifest_abi, self.web3, self.ipfs)
         self.global_registry = IPFSFileRegistry(self.global_registry_abi, self.web3, self.ipfs)
+        self.ipfs_connector = IPFSConnector(self.ipfs)
 
         self.segmenter = Segmenter(self.asp_registry, self.global_registry, self.global_registry_address)
 
@@ -66,9 +67,16 @@ class GlobalPlanner:
                                                      queue_size=10)
         self.liability_finish_service = rospy.ServiceProxy('~liability_finish', Empty)
 
-        self.service_id = rospy.get_param('~service_id')
+        self.service_id = None
+        self.service_name = rospy.get_param('~announced_service_name')
         self.pending_regional_route_requests = []
         self.current_route = None
+        self.announce_service()
+
+    def announce_service(self):
+        manifest = {"service_id": self.service_name}
+        self.service_id = self.ipfs_connector.add_to_ipfs(json.dumps(manifest))
+        rospy.loginfo("Announced service id is %s", self.service_id)
 
     def on_ask(self, ask):
         rospy.logdebug("GP found an Ask")
