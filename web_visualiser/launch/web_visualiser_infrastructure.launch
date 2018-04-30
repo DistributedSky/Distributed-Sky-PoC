@@ -1,0 +1,36 @@
+<launch>
+    <arg name="ipfs_http_provider" default="http://172.18.18.2:5001"/>
+    <arg name="web3_http_provider" default="http://parity:8545"/>
+    <arg name="lighthouse_contract"/>
+    <arg name="request_rosbag_topic" default="/rosbag/route_request"/>
+    <arg name="response_rosbag_topic" default="/rosbag/route_response"/>
+    <arg name="regional_service_name" default="regional_asp_route_confirm"/>
+    <arg name="global_service_name" default="global_planner_route_confirm"/>
+
+
+    <remap from="web_visualiser/bids" to="infochan/incoming/bid"/>
+    <remap from="web_visualiser/asks" to="infochan/incoming/ask"/>
+    <remap from="web_visualiser/results" to="infochan/incoming/result"/>
+    <remap from="web_visualiser/liabilities" to="liability/incoming"/>
+    <include file="$(find web_visualiser)/launch/web_visualiser.launch">
+        <arg name="regional_service_name" value="$(arg regional_service_name)"/>
+        <arg name="global_service_name" value="$(arg global_service_name)"/>
+        <arg name="web3_http_provider" value="$(arg web3_http_provider)"/>
+        <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+        <arg name="response_rosbag_topic" value="$(arg response_rosbag_topic)"/>
+        <arg name="request_rosbag_topic" value="$(arg request_rosbag_topic)"/>
+    </include>
+
+    <include file="$(find robonomics_lighthouse)/launch/infochan.launch">
+        <arg name="web3_http_provider" value="$(arg web3_http_provider)"/>
+        <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+        <arg name="lighthouse_contract" value="$(arg lighthouse_contract)"/>
+        <arg name="enable_generator" value="false"/>
+        <arg name="enable_signer" value="false"/>
+    </include>
+
+    <include file="$(find robonomics_liability)/launch/liability.launch">
+        <arg name="web3_http_provider" value="$(arg web3_http_provider)"/>
+        <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+    </include>
+</launch>

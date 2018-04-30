@@ -1,0 +1,51 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#app {
+    display: flex;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#map {
+    width: 70%;
+    height: 100%;
+}
+
+#log {
+    background: black;
+    color: white;
+    overflow-y: scroll;
+    width: 30%;
+    height: 100%;
+    font-family: sans-serif;
+    padding: 0;
+}
+
+#log .record {
+    overflow: hidden;
+}
+
+#log table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+#log table td {
+    word-wrap: break-word;
+    padding-left: 2px;
+}
+
+#log table tr:first-child td:first-child {
+    background: green;
+
+}
+
+.template {
+    display: none;
+}
