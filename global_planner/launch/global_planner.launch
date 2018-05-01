@@ -5,6 +5,7 @@
     <arg name="lighthouse_fee"/>
     <arg name="web3_http_provider"/>
     <arg name="global_registry_address"/>
+    <arg name="delay" default="0"/>
     <arg name="announced_service_name" default="global_planner_route_confirm"/>
 
 
@@ -16,6 +17,7 @@
         <param name="web3_http_provider" value="$(arg web3_http_provider)"/>
         <param name="global_registry_address" value="$(arg global_registry_address)"/>
         <param name="announced_service_name" value="$(arg announced_service_name)"/>
+        <param name="delay" value="$(arg delay)"/>
         <param name="asp_registry_abi" textfile="$(find dsky_main)/abi/ASPRegistry.json"/>
         <param name="asp_manifest_abi" textfile="$(find dsky_main)/abi/ASPManifest.json"/>
         <param name="global_registry_abi" textfile="$(find dsky_main)/abi/GlobalRegionsRegistry.json"/>

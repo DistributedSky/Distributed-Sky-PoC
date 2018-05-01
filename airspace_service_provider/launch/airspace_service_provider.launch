@@ -3,6 +3,7 @@
     <arg name="ipfs_http_provider"/>
     <arg name="token_address"/>
     <arg name="lighthouse_fee"/>
+    <arg name="delay" default="0"/>
 
 
     <node pkg="airspace_service_provider" type="airspace_service_provider_node" name="airspace_service_provider"
@@ -10,6 +11,7 @@
         <param name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
         <param name="lighthouse_fee" value="$(arg lighthouse_fee)"/>
         <param name="token_address" value="$(arg token_address)"/>
+        <param name="delay" value="$(arg delay)"/>
     </node>
 
 </launch>

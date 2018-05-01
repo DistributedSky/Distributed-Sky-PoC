@@ -9,6 +9,7 @@
     <arg name="lighthouse_contract"/>
     <arg name="global_registry_address"/>
     <arg name="eth_account_address" default="" />
+    <arg name="delay" default="2"/>
     <arg name="request_rosbag_topic" default="/rosbag/route_request" />
     <arg name="response_rosbag_topic" default="/rosbag/route_response"/>
 
@@ -25,6 +26,7 @@
         <arg name="web3_http_provider" value="$(arg web3_http_provider)" />
         <arg name="token_address" value="$(arg token_address)"/>
         <arg name="lighthouse_fee" value="$(arg lighthouse_fee)"/>
+        <arg name="delay" value="$(arg delay)"/>
         <arg name="global_registry_address" value="$(arg global_registry_address)"/>
     </include>
 

@@ -33,6 +33,8 @@ class AirspaceServiceProvider:
         self.confirmed_route_topic = rospy.Publisher('~local/sending/confirmation_result', RouteConfirmationResponse,
                                                      queue_size=10)
 
+        self.delay = rospy.get_param('~delay', 0)
+
         self.asp_service_id = None
         rospy.Subscriber('~local/asp_service_id', String, self.on_new_service_id)
 
@@ -45,6 +47,7 @@ class AirspaceServiceProvider:
         confirmation = RouteConfirmationResponse()
         confirmation.route = route
         confirmation.isConfirmed = True
+        rospy.sleep(self.delay)
         self.confirmed_route_topic.publish(confirmation)
         self.liability_finish_service()
         rospy.loginfo("ASP sent confirmation")
@@ -53,6 +56,7 @@ class AirspaceServiceProvider:
         rospy.logdebug("ASP found an Ask")
         if ask.model == self.asp_service_id:
             rospy.logdebug("ASP found an Ask with its service id")
+            rospy.sleep(self.delay)
             bid = self.prepare_bid(ask.model, ask.cost, ask.deadline)
             self.bid_topic.publish(bid)
 

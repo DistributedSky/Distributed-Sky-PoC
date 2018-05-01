@@ -67,6 +67,8 @@ class GlobalPlanner:
                                                      queue_size=10)
         self.liability_finish_service = rospy.ServiceProxy('~liability_finish', Empty)
 
+        self.delay = rospy.get_param('~delay', 0)
+
         self.service_id = None
         self.service_name = rospy.get_param('~announced_service_name')
         self.pending_regional_route_requests = []
@@ -82,10 +84,12 @@ class GlobalPlanner:
         rospy.logdebug("GP found an Ask")
         if ask.model == self.service_id:
             rospy.loginfo("GP found an Ask with its service id")
+            rospy.sleep(self.delay)
             bid = self.prepare_bid(ask.model, ask.cost, ask.deadline)
             self.bid_topic.publish(bid)
 
     def send_response(self, result: bool):
+        rospy.sleep(self.delay)
         confirmation = RouteConfirmationResponse()
         confirmation.route = self.current_route
         confirmation.isConfirmed = result

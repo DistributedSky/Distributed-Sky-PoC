@@ -8,6 +8,7 @@
     <arg name="lighthouse_contract"/>
     <arg name="asp_registry_address"/>
     <arg name="asp_manifest_address"/>
+    <arg name="delay" default="2"/>
     <arg name="eth_account_address" default="" />
 
     <remap from="airspace_service_provider/remote/incoming/ask" to="infochan/incoming/ask"/>
@@ -29,6 +30,7 @@
         <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
         <arg name="token_address" value="$(arg token_address)"/>
         <arg name="lighthouse_fee" value="$(arg lighthouse_fee)"/>
+        <arg name="delay" value="$(arg delay)"/>
     </include>
 
     <include file="$(find robonomics_lighthouse)/launch/infochan.launch">
