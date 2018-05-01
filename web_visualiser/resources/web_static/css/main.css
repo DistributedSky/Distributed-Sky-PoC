@@ -18,16 +18,17 @@ body {
 }
 
 #log {
-    background: black;
+    background: #999999;
     color: white;
     overflow-y: scroll;
-    width: 30%;
+    width: 40%;
     height: 100%;
     font-family: sans-serif;
     padding: 0;
 }
 
 #log .record {
+    background: black;
     overflow: hidden;
 }
 
@@ -43,6 +44,7 @@ body {
 
 #log table tr:first-child td:first-child {
     background: green;
+    font-weight: bold;
 
 }
 

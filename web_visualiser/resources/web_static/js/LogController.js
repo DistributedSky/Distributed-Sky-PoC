@@ -2,9 +2,10 @@ function LogController(logDivSelector) {
 
     function addRecord(params, body) {
         let newRecord = $(logDivSelector).find(".template").clone();
-        console.log(newRecord);
-        newRecord.find(".header").text(params['title']);
+        let header = newRecord.find(".header");
+        header.text(params['title']);
         newRecord.removeClass("template");
+        header.css("background", params['bgColor']);
         let attributeContainer = newRecord.find(".attribute");
         let attributeContainerParent = attributeContainer.parent();
         for (let i = 0; i < body.length; i++) {
@@ -16,7 +17,6 @@ function LogController(logDivSelector) {
             attributeContainer = attributeContainer.clone();
         }
         $(logDivSelector).prepend(newRecord);
-
     }
 
     let that = {

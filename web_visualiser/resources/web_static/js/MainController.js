@@ -3,31 +3,39 @@ function MainController(logController, mapController) {
     function initStyles() {
         mapController.setStyle('globalRequested', {color: 'blue', weight: 10, opacity: 0.9});
         mapController.setStyle('localRequested', {color: 'blue', weight: 5, opacity: 0.7});
-        mapController.setStyle('inWork', {color: 'yellow'});
+        mapController.setStyle('inWorkGlobal', {color: 'yellow'});
+        mapController.setStyle('inWorkLocal', {color: 'deepskyblue'});
         mapController.setStyle('confirmed', {color: 'green'});
         mapController.setStyle('rejected', {color: 'red'});
     }
 
-    function styleForServiceType(serviceType) {
-        return {"global": "globalRequested", "regional": "localRequested"}[serviceType];
+    function styleForServiceType(serviceType, styleType) {
+        return {
+            "requested": {
+                "global": "globalRequested", "regional": "localRequested"
+            },
+            "inWork": {
+                "global": "inWorkGlobal", "regional": "inWorkLocal"
+            }
+        }[styleType][serviceType];
     }
 
     const valuesToLog = {
         "serviceId": "Service Id:",
+        "model": "Service model:",
+        "liability": "Liability:",
         "sender": "Sender:",
         "routeHash": "Route hash:",
         "promisee": "Promisee:",
         "promisor": "Promisor:",
-        "liability": "Liability:",
         "isConfirmed": "Is confirmed:"
     };
 
     function getArgumentsToLog(data) {
-
         let arguments = [];
-        for(let argKey in data) {
-            if(data.hasOwnProperty(argKey)) {
-                if(argKey in valuesToLog) {
+        for (let argKey in valuesToLog) {
+            if (valuesToLog.hasOwnProperty(argKey)) {
+                if (argKey in data) {
                     arguments.push({"name": valuesToLog[argKey], "value": data[argKey]});
                 }
             }
@@ -36,32 +44,29 @@ function MainController(logController, mapController) {
     }
 
     function onAsk(data) {
-        console.log(data);
-        logController.addRecord({'title': 'Ask'}, getArgumentsToLog(data));
-        mapController.addRoute(data['routeHash'], data['route'], styleForServiceType(data['serviceType']));
+        logController.addRecord({'title': 'Ask', 'bgColor': 'blue'}, getArgumentsToLog(data));
+        mapController.addRoute(data['routeHash'], data['route'], styleForServiceType(data['serviceType'], 'requested'));
     }
 
     function onBid(data) {
-        logController.addRecord({'title': 'Bid'}, getArgumentsToLog(data));
+        logController.addRecord({'title': 'Bid', 'bgColor': 'deepskyblue'}, getArgumentsToLog(data));
     }
 
     function onLiability(data) {
-        logController.addRecord({'title': 'Liability created'}, getArgumentsToLog(data));
-        mapController.setStyleTo(data['routeHash'], "inWork");
+        logController.addRecord({'title': 'Liability created', 'bgColor': 'orange'}, getArgumentsToLog(data));
+        mapController.setStyleTo(data['routeHash'], styleForServiceType(data['serviceType'], 'inWork'));
     }
 
     function onResult(data) {
-        logController.addRecord({'title': 'Result gathered'}, getArgumentsToLog(data));
+
         let style = data['isConfirmed'] ? "confirmed" : "rejected";
+        let color = data['isConfirmed'] ? "green" : "red";
+        logController.addRecord({'title': 'Result gathered', 'bgColor': color}, getArgumentsToLog(data));
         mapController.setStyleTo(data['routeHash'], style);
     }
 
     function connect() {
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
-        socket.on('connect', function () {
-            console.log("Connected");
-            socket.emit('my event', {data: 'I\'m connected!'});
-        });
+        let socket = io.connect('http://' + document.domain + ':' + location.port);
         socket.on('ask', onAsk);
         socket.on('bid', onBid);
         socket.on('liability', onLiability);

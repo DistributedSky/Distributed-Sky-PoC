@@ -6,6 +6,7 @@
     <arg name="response_rosbag_topic" default="/rosbag/route_response"/>
     <arg name="regional_service_name" default="regional_asp_route_confirm"/>
     <arg name="global_service_name" default="global_planner_route_confirm"/>
+    <arg name="address_aliases" default="[]"/>
 
 
     <remap from="web_visualiser/bids" to="infochan/incoming/bid"/>
@@ -19,6 +20,7 @@
         <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
         <arg name="response_rosbag_topic" value="$(arg response_rosbag_topic)"/>
         <arg name="request_rosbag_topic" value="$(arg request_rosbag_topic)"/>
+        <arg name="address_aliases" value="$(arg address_aliases)"/>
     </include>
 
     <include file="$(find robonomics_lighthouse)/launch/infochan.launch">
