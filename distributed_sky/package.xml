@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>distributed_sky</name>
+  <version>0.0.0</version>
+  <description>Distributed sky prototype</description>
+  <maintainer email="mail@xomak.net">Konstantin Danilov</maintainer>
+  <license>BSD3</license>
+  <url type="repository">https://github.com/XomakNet/distributed_sky</url>
+  <author email="mail@xomak.net">Konstantin Danilov</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+
+</package>

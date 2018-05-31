@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package>
+  <name>web_visualiser</name>
+  <version>0.0.0</version>
+  <description>Distributed sky web visualiser</description>
+  <maintainer email="mail@xomak.net">Konstantin Danilov</maintainer>
+  <license>BSD3</license>
+  <author email="mail@xomak.net">Konstantin Danilov</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>message_runtime</run_depend>
+
+</package>

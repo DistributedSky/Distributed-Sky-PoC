@@ -1,0 +1,24 @@
+<launch>
+    <!-- arguments -->
+    <arg name="ipfs_http_provider"/>
+    <arg name="web3_http_provider"/>
+    <arg name="asp_registry_address"/>
+    <arg name="asp_manifest_address"/>
+    <arg name="announced_service_name" default="regional_asp_route_confirm"/>
+    <arg name="eth_account_address" default="" />
+
+
+    <node pkg="airspace_service_provider" type="registry_connector_node" name="registry_connector"
+          output="screen">
+        <param name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+        <param name="web3_http_provider" value="$(arg web3_http_provider)"/>
+        <param name="asp_registry_abi" textfile="$(find dsky_main)/abi/ASPRegistry.json"/>
+        <param name="asp_manifest_abi" textfile="$(find dsky_main)/abi/ASPManifest.json"/>
+        <param name="asp_registry_address" value="$(arg asp_registry_address)"/>
+        <param name="announced_service_name" value="$(arg announced_service_name)"/>
+        <param name="asp_manifest_address" value="$(arg asp_manifest_address)"/>
+        <param name="eth_account_address" value="$(arg eth_account_address)"
+             if="$(eval len(arg('eth_account_address')) > 0)"/>
+    </node>
+
+</launch>

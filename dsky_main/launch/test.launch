@@ -1,0 +1,22 @@
+<launch>
+  <!-- arguments -->
+  <arg name="web3_http_provider" default="http://parity:8545" />
+  <arg name="ipfs_http_provider" default="http://172.18.18.2:5001" />
+  <arg name="lighthouse_contract" default="0xDCdFA7579f44341Aa3F4b9AdAc3c3A272A5f1aBF" />
+  <arg name="enable_generator" default="true" />
+  <arg name="enable_signer" default="true" />
+
+  <!-- market group -->
+  <group ns="infochan">
+    <node pkg="robonomics_lighthouse" type="infochan_node" name="infochan">
+      <param name="ipfs_http_provider" value="$(arg ipfs_http_provider)" />
+      <param name="lighthouse_contract" value="$(arg lighthouse_contract)" />
+    </node>
+
+    <node pkg="robonomics_lighthouse" type="signer_node" name="signer" if="$(arg enable_signer)" output="screen">
+      <param name="web3_http_provider" value="$(arg web3_http_provider)" />
+    </node>
+
+    <node pkg="robonomics_lighthouse" type="generator_node" name="generator" if="$(arg enable_generator)" />
+  </group>
+</launch>
