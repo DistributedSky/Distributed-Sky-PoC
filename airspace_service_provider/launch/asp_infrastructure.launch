@@ -1,0 +1,51 @@
+<launch>
+    <arg name="ipfs_http_provider" default="http://172.18.18.2:5001"/>
+    <arg name="token_address" default="0x2B3cE4c151f7c9662fdD12e5b9C7B39b0D61e7F2"/>
+    <!-- Meaningless stub -->
+    <arg name="validator_address" default="0x0000000000000000000000000000000000000000"/>
+    <arg name="lighthouse_fee" default="1"/>
+    <arg name="web3_http_provider" default="http://parity:8545"/>
+    <arg name="lighthouse_contract"/>
+    <arg name="asp_registry_address"/>
+    <arg name="asp_manifest_address"/>
+    <arg name="delay" default="2"/>
+    <arg name="eth_account_address" default="" />
+
+    <remap from="airspace_service_provider/remote/incoming/ask" to="infochan/incoming/ask"/>
+    <remap from="airspace_service_provider/remote/sending/bid" to="infochan/signing/bid"/>
+    <remap from="airspace_service_provider/rosbag/route_request" to="/rosbag/route_request"/>
+    <remap from="airspace_service_provider/liability_finish" to="/liability/finish"/>
+    <remap from="airspace_service_provider/local/sending/confirmation_result" to="/rosbag/route_response"/>
+    <remap from="airspace_service_provider/local/asp_service_id" to="registry_connector/asp_service_id"/>
+
+    <include file="$(find airspace_service_provider)/launch/registry_connector.launch">
+        <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+        <arg name="web3_http_provider" value="$(arg web3_http_provider)" />
+        <arg name="eth_account_address" value="$(arg eth_account_address)" />
+        <arg name="asp_registry_address" value="$(arg asp_registry_address)"/>
+        <arg name="asp_manifest_address" value="$(arg asp_manifest_address)"/>
+    </include>
+
+    <include file="$(find airspace_service_provider)/launch/airspace_service_provider.launch">
+        <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+        <arg name="token_address" value="$(arg token_address)"/>
+        <arg name="lighthouse_fee" value="$(arg lighthouse_fee)"/>
+        <arg name="delay" value="$(arg delay)"/>
+    </include>
+
+    <include file="$(find robonomics_lighthouse)/launch/infochan.launch">
+      <arg name="web3_http_provider" value="$(arg web3_http_provider)" />
+      <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+      <arg name="lighthouse_contract" value="$(arg lighthouse_contract)" />
+      <arg name="enable_generator" value="false" />
+      <arg name="enable_signer" value="true" />
+      <arg name="eth_account_address" value="$(arg eth_account_address)" />
+    </include>
+
+    <remap from="/liability/result" to="/infochan/signing/result"/>
+    <include file="$(find robonomics_liability)/launch/liability.launch">
+        <arg name="eth_account_address" value="$(arg eth_account_address)" />
+        <arg name="web3_http_provider" value="$(arg web3_http_provider)" />
+        <arg name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+    </include>
+</launch>

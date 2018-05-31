@@ -1,0 +1,2 @@
+geographic_msgs/GeoPath route
+bool isConfirmed

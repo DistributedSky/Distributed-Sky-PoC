@@ -1,0 +1,26 @@
+<launch>
+    <!-- arguments -->
+    <arg name="regional_service_name"/>
+    <arg name="global_service_name"/>
+    <arg name="ipfs_http_provider"/>
+    <arg name="web3_http_provider"/>
+    <arg name="response_rosbag_topic" default="/rosbag/route_response"/>
+    <arg name="request_rosbag_topic" default="/rosbag/route_request"/>
+    <arg name="address_aliases" default="[]"/>
+
+    <node pkg="web_visualiser" type="web_visualiser_node" name="web_visualiser"
+          output="screen">
+        <param name="flask_static_folder" value="$(find web_visualiser)/resources/web_static"/>
+        <param name="flask_template_folder" value="$(find web_visualiser)/resources/web_templates"/>
+        <param name="regional_service_name" value="$(arg regional_service_name)"/>
+        <param name="global_service_name" value="$(arg global_service_name)"/>
+        <param name="web3_http_provider" value="$(arg web3_http_provider)"/>
+        <param name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+        <param name="request_rosbag_topic" value="$(arg request_rosbag_topic)"/>
+        <param name="response_rosbag_topic" value="$(arg response_rosbag_topic)"/>
+        <rosparam param="address_aliases" subst_value="True">
+            $(arg address_aliases)
+        </rosparam>
+    </node>
+
+</launch>

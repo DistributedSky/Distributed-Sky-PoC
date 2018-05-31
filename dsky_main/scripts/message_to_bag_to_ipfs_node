@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+from dsky_main.nodes import message_to_bag_to_ipfs_node
+
+if __name__ == '__main__':
+    message_to_bag_to_ipfs_node()

@@ -1,0 +1,12 @@
+<launch>
+
+    <!-- arguments -->
+    <arg name="ipfs_http_provider"/>
+    <arg name="rosbag_topic" default="record"/>
+
+    <node pkg="dsky_main" type="message_to_bag_to_ipfs_node" name="message_to_bag_to_ipfs">
+        <param name="ipfs_http_provider" value="$(arg ipfs_http_provider)"/>
+        <param name="rosbag_topic" value="$(arg rosbag_topic)"/>
+    </node>
+
+</launch>
